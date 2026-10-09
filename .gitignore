@@ -1,8 +1,21 @@
+# Python
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
+
+# Generated media and reports
 output/
+
+# Packaging (PyInstaller etc.)
 build/
 dist/
 *.spec
+*.egg-info/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
