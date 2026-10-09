@@ -1,0 +1,11 @@
+[project]
+name = "beaconlock"
+version = "1.0.0"
+description = "BeaconLock - virtual testbed for coarse alignment of mobile FSOC links (SIH 2026, PS SIH26169). Synthetic simulation only."
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+filterwarnings = ["ignore::DeprecationWarning:starlette.*", "ignore:Using `httpx`:DeprecationWarning"]

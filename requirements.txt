@@ -1,0 +1,6 @@
+# BeaconLock runtime (Windows / macOS / Linux, Python 3.10+).
+# Loosely pinned; everything runs offline after install (no CDNs, no external APIs).
+numpy>=1.24,<3
+opencv-python-headless>=4.8,<6   # headless is enough; opencv-python also works
+fastapi>=0.100,<1                # web dashboard only (core sim/, tracking/, metrics.py never import it)
+uvicorn>=0.23,<1

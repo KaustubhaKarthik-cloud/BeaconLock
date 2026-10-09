@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest>=7,<10
+httpx>=0.24,<1         # FastAPI TestClient (tests/test_web.py)
+imageio-ffmpeg>=0.4,<1 # bundled ffmpeg for MP4/GIF export if no system ffmpeg (scripts/)

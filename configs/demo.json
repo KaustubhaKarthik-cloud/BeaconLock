@@ -1,0 +1,81 @@
+{
+  "name": "demo",
+  "description": "SYNTHETIC demo: camera starts off-target, spiral-searches, locks and tracks a weaving beacon under turbulence.",
+  "synthetic": true,
+  "sim": {
+    "fps": 30.0,
+    "target_beacon": 0
+  },
+  "scene": {
+    "name": "demo",
+    "description": "SYNTHETIC scene: one beacon weaving across a night sky.",
+    "synthetic": true,
+    "seed": 42,
+    "world": {
+      "width": 1920,
+      "height": 1080,
+      "background_level": 6.0
+    },
+    "stars": {
+      "count": 700,
+      "min_brightness": 25.0,
+      "max_brightness": 170.0,
+      "min_sigma": 0.5,
+      "max_sigma": 1.4,
+      "power": 3.0
+    },
+    "noise": {
+      "sigma": 3.0
+    },
+    "watermark": {
+      "enabled": true,
+      "text": "SYNTHETIC SCENE",
+      "intensity": 60.0
+    },
+    "beacons": [
+      {
+        "id": "beacon-1",
+        "sigma": 4.0,
+        "intensity": 255.0,
+        "trajectory": {
+          "type": "sinusoidal",
+          "start": [
+            520,
+            420
+          ],
+          "velocity": [
+            220,
+            0
+          ],
+          "amplitude": 160,
+          "frequency": 0.18,
+          "phase": 0.0,
+          "edge": "bounce",
+          "margin": [
+            330,
+            250
+          ]
+        }
+      }
+    ]
+  },
+  "camera": {
+    "width": 640,
+    "height": 480,
+    "center": [
+      1550,
+      830
+    ],
+    "max_slew": 1500.0
+  },
+  "disturbances": {
+    "turbulence": 40,
+    "vibration": 30,
+    "noise": 20,
+    "blur": 15,
+    "seed": 7
+  },
+  "detector": {},
+  "tracker": {},
+  "controller": {}
+}

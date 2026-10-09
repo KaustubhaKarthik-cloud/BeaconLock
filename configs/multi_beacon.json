@@ -1,0 +1,97 @@
+{
+  "name": "multi_beacon_example",
+  "description": "SYNTHETIC scene: four beacons covering every trajectory model (linear bounce, linear wrap, random waypoint, sinusoidal). Not real mission data.",
+  "synthetic": true,
+  "seed": 2026,
+  "world": {
+    "width": 1920,
+    "height": 1080,
+    "background_level": 8.0
+  },
+  "stars": {
+    "count": 900,
+    "min_brightness": 25.0,
+    "max_brightness": 190.0,
+    "min_sigma": 0.5,
+    "max_sigma": 1.5,
+    "power": 3.0
+  },
+  "noise": {
+    "sigma": 4.0
+  },
+  "watermark": {
+    "enabled": true,
+    "text": "SYNTHETIC SCENE",
+    "intensity": 60.0
+  },
+  "beacons": [
+    {
+      "id": "uav-linear-bounce",
+      "sigma": 4.0,
+      "intensity": 255.0,
+      "trajectory": {
+        "type": "linear",
+        "start": [
+          300,
+          200
+        ],
+        "velocity": [
+          420,
+          260
+        ],
+        "mode": "bounce"
+      }
+    },
+    {
+      "id": "sat-linear-wrap",
+      "sigma": 3.0,
+      "intensity": 230.0,
+      "trajectory": {
+        "type": "linear",
+        "start": [
+          1700,
+          900
+        ],
+        "velocity": [
+          -350,
+          0
+        ],
+        "mode": "wrap"
+      }
+    },
+    {
+      "id": "uav-random-waypoint",
+      "sigma": 5.0,
+      "intensity": 255.0,
+      "trajectory": {
+        "type": "random_waypoint",
+        "start": [
+          960,
+          540
+        ],
+        "speed": 380,
+        "pause": 0.3,
+        "speed_jitter": 0.25
+      }
+    },
+    {
+      "id": "uav-sinusoidal",
+      "sigma": 3.5,
+      "intensity": 240.0,
+      "trajectory": {
+        "type": "sinusoidal",
+        "start": [
+          100,
+          700
+        ],
+        "velocity": [
+          260,
+          0
+        ],
+        "amplitude": 150,
+        "frequency": 0.6,
+        "phase": 1.57
+      }
+    }
+  ]
+}

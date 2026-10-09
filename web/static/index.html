@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BeaconLock - FSOC coarse-alignment testbed</title>
+  <link rel="preload" href="/static/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/jetbrains-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo" aria-hidden="true"></span>
+    <div>
+      <h1>BeaconLock</h1>
+      <p>FSOC coarse-alignment testbed <span class="sep">/</span> SIH 2026 <span class="sep">/</span> PS SIH26169</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="synthetic">SYNTHETIC SIMULATION <span class="dim">&middot; NO MISSION DATA</span></div>
+    <div class="clock"><span class="lbl">UTC</span> <span id="utc-clock">--:--:--</span></div>
+  </div>
+</header>
+
+<main>
+  <!-- ======================= config panel ======================= -->
+  <aside class="card panel">
+    <h2>Run control</h2>
+    <div class="buttons">
+      <button id="btn-start" class="primary">Start</button>
+      <button id="btn-stop">Stop</button>
+      <button id="btn-reset">Reset</button>
+    </div>
+    <a id="btn-report" class="button download" href="/api/report" download>Download performance report <span class="dim">.zip</span></a>
+
+    <h2>Scenario <small>apply resets run</small></h2>
+    <label>Trajectory
+      <select id="trajectory"></select>
+    </label>
+    <label>Beacon speed <span class="readout"><output id="speed-out"></output><span class="u">px/s</span></span>
+      <input type="range" id="speed" min="20" max="800" step="10">
+    </label>
+    <div class="nm">
+      <label>Acquire N<input type="number" id="acquire_n" min="1" max="30"></label>
+      <label>of M<input type="number" id="acquire_m" min="1" max="30"></label>
+      <label>Lose N<input type="number" id="lose_n" min="1" max="60"></label>
+      <label>of M<input type="number" id="lose_m" min="1" max="60"></label>
+    </div>
+    <label>Seed<input type="number" id="seed" min="0"></label>
+    <button id="btn-apply">Apply &amp; reset</button>
+    <p id="config-msg" class="msg"></p>
+
+    <h2>Disturbances <small>live &middot; 0&ndash;100</small></h2>
+    <label>Atmospheric turbulence <span class="readout"><output id="turbulence-out"></output><span class="u">/100</span></span>
+      <input type="range" id="turbulence" class="dist" min="0" max="100"></label>
+    <label>Platform vibration <span class="readout"><output id="vibration-out"></output><span class="u">/100</span></span>
+      <input type="range" id="vibration" class="dist" min="0" max="100"></label>
+    <label>Sensor noise <span class="readout"><output id="noise-out"></output><span class="u">/100</span></span>
+      <input type="range" id="noise" class="dist" min="0" max="100"></label>
+    <label>Motion blur <span class="readout"><output id="blur-out"></output><span class="u">/100</span></span>
+      <input type="range" id="blur" class="dist" min="0" max="100"></label>
+    <label class="check"><input type="checkbox" id="show_truth"> Show ground truth (white &times;)</label>
+  </aside>
+
+  <!-- ======================= camera + chart ======================= -->
+  <section class="center">
+    <div class="card camera">
+      <div class="card-head">
+        <h2>Camera feed <small>640&times;480 &middot; virtual pan-tilt</small></h2>
+        <span id="badge" class="badge IDLE">IDLE</span>
+      </div>
+      <div class="sensor">
+        <img id="cam" alt="camera feed" width="640" height="480">
+        <span class="br tl"></span><span class="br tr"></span><span class="br bl"></span><span class="br brr"></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <h2>Tracking error <small>boresight vs ground truth &middot; px &middot; last 10 s</small></h2>
+        <div class="legend">
+          <span class="lg SEARCHING">search</span><span class="lg ACQUIRING">acquire</span>
+          <span class="lg LOCKED">locked</span><span class="lg LOST">lost</span>
+        </div>
+      </div>
+      <canvas id="chart" width="640" height="200"></canvas>
+    </div>
+  </section>
+
+  <!-- ======================= minimap + stats ======================= -->
+  <section class="right">
+    <div class="card">
+      <h2>World minimap <small>FOV &middot; beacon (ring) &middot; estimate (cross) &middot; grid 160 px</small></h2>
+      <img id="minimap" alt="world minimap" width="480" height="270">
+    </div>
+    <div class="stats">
+      <div class="stat"><span>State</span><b id="s-state">IDLE</b></div>
+      <div class="stat"><span>Loop rate</span><b id="s-fps">&ndash;</b><em id="s-cap"></em></div>
+      <div class="stat"><span>Error now</span><b id="s-err">&ndash;</b><em>boresight to truth</em></div>
+      <div class="stat"><span>Avg error (locked)</span><b id="s-avg">&ndash;</b><em id="s-max"></em></div>
+      <div class="stat big"><span>Lock retention</span><b id="s-ret">&ndash;</b><em id="s-lockpct"></em></div>
+      <div class="stat big"><span>Acquisition time</span><b id="s-acq">&ndash;</b><em>start &rarr; first LOCKED</em></div>
+      <div class="stat"><span>Lock losses / re-acq.</span><b id="s-loss">0 / 0</b></div>
+      <div class="stat"><span>Sim time</span><b id="s-t">0.0 s</b><em id="s-proc"></em></div>
+    </div>
+  </section>
+</main>
+<footer>
+  All scenes, beacons and disturbances are procedurally generated (synthetic). Errors are camera pixels measured against simulator ground truth.
+</footer>
+<script src="/static/app.js"></script>
+</body>
+</html>
